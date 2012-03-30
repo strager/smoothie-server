@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<title>Smoothie Server</title>
+
+<p>Hello, world</p>
+
+<div id="charts"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/smoothie.js"></script>
+<script>
+(function () {
+    var chartsEl = document.getElementById('charts');
+
+    var charts = { }; // => { smoothie, el, series }
+
+    var socket = io.connect();
+    socket.on('update', function on_update(data) {
+        var chartName = data['name'];
+        var x = data['x'];
+        var y = data['y'];
+
+        if (!Object.prototype.hasOwnProperty.call(charts, chartName)) {
+            var canvas = document.createElement('canvas');
+
+            var title = document.createElement('h2');
+            title.textContent = chartName;
+
+            var el = document.createElement('div');
+            el.appendChild(title);
+            el.appendChild(canvas);
+            chartsEl.appendChild(el);
+
+            var timeSeries = new TimeSeries();
+
+            var smoothie = new SmoothieChart();
+            smoothie.streamTo(canvas);
+            smoothie.addTimeSeries(timeSeries);
+
+            charts[chartName] = {
+                smoothie: smoothie,
+                el: el,
+                series: timeSeries
+            };
+        }
+
+        charts[chartName].series.append(x, y);
+    });
+}());
+</script>

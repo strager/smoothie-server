@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+var DataStore = require('../lib/DataStore');
+
+var data = new DataStore();
+
+var httpServer = require('../lib/httpServer');
+var smoothieServer = require('../lib/smoothieServer');
+
+httpServer.create(data).listen(9080);
+smoothieServer.create(data).listen(9006);

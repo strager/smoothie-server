@@ -3,9 +3,8 @@ package spaceport {
 
     public class SmoothieClient {
         private var socket:Socket;
-        private var lastHeapSnapshot
 
-        public SmoothieClient(socket:Socket) {
+        public function SmoothieClient(socket:Socket) {
             this.socket = socket;
         }
 
